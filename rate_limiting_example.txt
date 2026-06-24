@@ -1,0 +1,721 @@
+>>     content_id = "0427b510-d910-4db9-bac0-c1a46be2b652"
+>>     creator_reasoning = "This is my personal original creative food blog description written completely from memory."
+>> } | ConvertTo-Json
+>> 
+>> Invoke-RestMethod -Uri "http://127.0.0.1:5000/appeal" -Method Post -Body $appealBody -ContentType "application/json"
+
+message                                                     
+-------                                                     
+Appeal successfully logged. State changed to 'under review'.
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> Invoke-RestMethod -Uri "http://127.0.0.1:5000/log" -Method Get
+
+
+assigned_label    : Verified Authentic: This content matches patterns consistent with original human composition and diverse linguistic 
+                    structure.
+combined_score    : 0.1701
+content_id        : 0427b510-d910-4db9-bac0-c1a46be2b652
+creator_id        : user_45
+creator_reasoning : This is my personal original creative food blog description written completely from memory.
+groq_score        : 0.21
+lifecycle_status  : under review
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:53:33.598806Z
+
+assigned_label    : Calibrating (Milestone 4 Integrated)
+combined_score    : 0.1701
+content_id        : 1bb30326-9cbf-43de-bc72-21699fb23dcf
+creator_id        : user_45
+creator_reasoning : 
+groq_score        : 0.21
+lifecycle_status  : classified
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:51:53.884526Z
+
+assigned_label    : Processing (Milestone 3 Skeleton)
+combined_score    : 0.87
+content_id        : 8807962d-4cde-4386-a8f6-c62ed93bfc27
+creator_id        : user_45
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.0
+text_preview      : Furthermore, it is critical to maximize leverage across cros...
+timestamp         : 2026-06-24T18:48:22.565714Z
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $body1 = @{
+>>     creator_id = "test_ai"
+>>     text = "Artificial intelligence represents a transformative paradigm shift in modern society. It is important to note that while the benefits of AI are numerous, it is equally essential to consider the ethical implications. Furthermore, stakeholders across various sectors must collaborate to ensure responsible deployment."
+>> } | ConvertTo-Json
+>> Invoke-RestMethod -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $body1 -ContentType "application/json"
+
+
+combined_score     : 0.709
+content_id         : 1a824261-601f-4ad4-8e9e-9e07400a5989
+creator_id         : test_ai
+lifecycle_status   : classified
+transparency_label : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                     attribution. Audiences are encouraged to evaluate context independently.
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $body2 = @{
+>>     creator_id = "test_human_casual"
+>>     text = "ok so i finally tried that new ramen place downtown and honestly? underwhelming. the broth was fine but they put WAY too much sodium in it and i was thirsty for like three hours after. my friend got the spicy version and said it was better. probably won't go back unless someone drags me there"
+>> } | ConvertTo-Json
+>> Invoke-RestMethod -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $body2 -ContentType "application/json"
+
+
+combined_score     : 0.17
+content_id         : 9664380f-f073-42e3-a10a-b17b17ebdd1b
+creator_id         : test_human_casual
+lifecycle_status   : classified
+transparency_label : Verified Authentic: This content matches patterns consistent with original human composition and diverse linguistic 
+                     structure.
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $body3 = @{
+>>     creator_id = "test_human_formal"
+>>     text = "The relationship between monetary policy and asset price inflation has been extensively studied in the literature. Central banks face a fundamental tension between their mandate for price stability and the unintended consequences of prolonged low interest rates on equity and real estate valuations."
+>> } | ConvertTo-Json
+>> Invoke-RestMethod -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $body3 -ContentType "application/json"
+
+
+combined_score     : 0.704
+content_id         : 7f298cb5-e1c9-4274-aa33-ace85321145a
+creator_id         : test_human_formal
+lifecycle_status   : classified
+transparency_label : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                     attribution. Audiences are encouraged to evaluate context independently.
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $body4 = @{
+>>     creator_id = "test_hybrid"
+>>     text = "I've been thinking a lot about remote work lately. There are genuine tradeoffs — flexibility and no commute on one side, isolation and blurred work-life boundaries on the other. Studies show productivity varies widely by individual and role type."
+>> } | ConvertTo-Json
+>> Invoke-RestMethod -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $body4 -ContentType "application/json"
+
+
+combined_score     : 0.45
+content_id         : 2d12a3c1-09f1-4a13-a516-2d8e352df8da
+creator_id         : test_hybrid
+lifecycle_status   : classified
+transparency_label : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                     attribution. Audiences are encouraged to evaluate context independently.
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $rateBody = @{
+>>     text = "This is a test submission for rate limit testing purposes only."
+>>     creator_id = "ratelimit-test"
+>> } | ConvertTo-Json
+>> 
+>> 1..12 | ForEach-Object {
+>>     try {
+>>         $resp = Invoke-WebRequest -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $rateBody -ContentType "application/json" -UseBasicParsing                                                                                                                                        
+>>         Write-Host "Request $_ : $($resp.StatusCode)"                                                                                       
+>>     } catch {                                                                                                                               
+>>         Write-Host "Request $_ : $($_.Exception.Response.StatusCode.Value__)"                                                               
+>>     }                                                                                                                                       
+>> }                                                                                                                                           
+Request 1 : 201                                                                                                                                
+Request 2 : 201                                                                                                                                
+Request 3 : 201                                                                                                                                
+Request 4 : 201                                                                                                                                
+Request 5 : 201                                                                                                                                
+Request 6 : 201                                                                                                                                
+Request 7 : 201                                                                                                                                
+Request 8 : 201                                                                                                                                
+Request 9 : 201                                                                                                                                
+Request 10 : 201
+Request 11 : 201
+Request 12 : 201
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> Invoke-RestMethod -Uri "http://127.0.0.1:5000/log" -Method Get
+
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : e518fe6b-87e5-4623-b09d-f80eae9cfba8
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:01.249712Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 1b1eecad-989f-4cb4-93ce-dc19f5d31f07
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:00.940571Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 01fd72d2-532e-4a5a-b027-cbc37baa1b43
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:00.619626Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : c7d38bde-e579-41f8-aaa0-1bd3ca3f5680
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:00.279082Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : d73c1d03-6f8c-44a4-9349-5c6d9c0edc1f
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.952100Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 7f6d717e-9f6b-4343-9d45-c7037740dfff
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.559068Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 755c17db-58b4-4254-99d1-29c27cec148c
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.216403Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 78bddb36-7bf5-42dc-bbfa-9707b0f18d61
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.047353Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 73bd5736-501b-4ae1-a469-af9537189b3a
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:58.759082Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 1fd2e696-1be1-4622-b842-09db5cc32b6d
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:58.456130Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : ef5aeb6c-e415-4c72-aced-7dd69becb693
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:58.160638Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 5c495d8d-4b6c-4811-9a29-e736ccf258cc
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:57.538789Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.4503333333333333
+content_id        : 2d12a3c1-09f1-4a13-a516-2d8e352df8da
+creator_id        : test_hybrid
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5066666666666666
+text_preview      : I've been thinking a lot about remote work lately. There are...
+timestamp         : 2026-06-24T18:59:43.914195Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.70375
+content_id        : 7f298cb5-e1c9-4274-aa33-ace85321145a
+creator_id        : test_human_formal
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.395
+text_preview      : The relationship between monetary policy and asset price inf...
+timestamp         : 2026-06-24T18:59:32.296189Z
+
+assigned_label    : Verified Authentic: This content matches patterns consistent with original human composition and diverse linguistic 
+                    structure.
+combined_score    : 0.1701
+content_id        : 9664380f-f073-42e3-a10a-b17b17ebdd1b
+creator_id        : test_human_casual
+creator_reasoning : 
+groq_score        : 0.21
+lifecycle_status  : classified
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:59:20.154251Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.7086111111111111
+content_id        : 1a824261-601f-4ad4-8e9e-9e07400a5989
+creator_id        : test_ai
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.40888888888888886
+text_preview      : Artificial intelligence represents a transformative paradigm...
+timestamp         : 2026-06-24T18:58:59.704630Z
+
+assigned_label    : Verified Authentic: This content matches patterns consistent with original human composition and diverse linguistic 
+                    structure.
+combined_score    : 0.1701
+content_id        : 0427b510-d910-4db9-bac0-c1a46be2b652
+creator_id        : user_45
+creator_reasoning : This is my personal original creative food blog description written completely from memory.
+groq_score        : 0.21
+lifecycle_status  : under review
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:53:33.598806Z
+
+assigned_label    : Calibrating (Milestone 4 Integrated)
+combined_score    : 0.1701
+content_id        : 1bb30326-9cbf-43de-bc72-21699fb23dcf
+creator_id        : user_45
+creator_reasoning : 
+groq_score        : 0.21
+lifecycle_status  : classified
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:51:53.884526Z
+
+assigned_label    : Processing (Milestone 3 Skeleton)
+combined_score    : 0.87
+content_id        : 8807962d-4cde-4386-a8f6-c62ed93bfc27
+creator_id        : user_45
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.0
+text_preview      : Furthermore, it is critical to maximize leverage across cros...
+timestamp         : 2026-06-24T18:48:22.565714Z
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> Invoke-RestMethod -Uri "http://127.0.0.1:5000/log" -Method Get
+
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : e518fe6b-87e5-4623-b09d-f80eae9cfba8
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:01.249712Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 1b1eecad-989f-4cb4-93ce-dc19f5d31f07
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:00.940571Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 01fd72d2-532e-4a5a-b027-cbc37baa1b43
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:00.619626Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : c7d38bde-e579-41f8-aaa0-1bd3ca3f5680
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T19:00:00.279082Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : d73c1d03-6f8c-44a4-9349-5c6d9c0edc1f
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.952100Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 7f6d717e-9f6b-4343-9d45-c7037740dfff
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.559068Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 755c17db-58b4-4254-99d1-29c27cec148c
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.216403Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 78bddb36-7bf5-42dc-bbfa-9707b0f18d61
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:59.047353Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 73bd5736-501b-4ae1-a469-af9537189b3a
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:58.759082Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 1fd2e696-1be1-4622-b842-09db5cc32b6d
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:58.456130Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : ef5aeb6c-e415-4c72-aced-7dd69becb693
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:58.160638Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.448
+content_id        : 5c495d8d-4b6c-4811-9a29-e736ccf258cc
+creator_id        : ratelimit-test
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5
+text_preview      : This is a test submission for rate limit testing purposes on...
+timestamp         : 2026-06-24T18:59:57.538789Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.4503333333333333
+content_id        : 2d12a3c1-09f1-4a13-a516-2d8e352df8da
+creator_id        : test_hybrid
+creator_reasoning : 
+groq_score        : 0.42
+lifecycle_status  : classified
+stylometric_score : 0.5066666666666666
+text_preview      : I've been thinking a lot about remote work lately. There are...
+timestamp         : 2026-06-24T18:59:43.914195Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.70375
+content_id        : 7f298cb5-e1c9-4274-aa33-ace85321145a
+creator_id        : test_human_formal
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.395
+text_preview      : The relationship between monetary policy and asset price inf...
+timestamp         : 2026-06-24T18:59:32.296189Z
+
+assigned_label    : Verified Authentic: This content matches patterns consistent with original human composition and diverse linguistic 
+                    structure.
+combined_score    : 0.1701
+content_id        : 9664380f-f073-42e3-a10a-b17b17ebdd1b
+creator_id        : test_human_casual
+creator_reasoning : 
+groq_score        : 0.21
+lifecycle_status  : classified
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:59:20.154251Z
+
+assigned_label    : Linguistic Origin Unclear: This text contains a blend of stylistic patterns that prevent definitive automated 
+                    attribution. Audiences are encouraged to evaluate context independently.
+combined_score    : 0.7086111111111111
+content_id        : 1a824261-601f-4ad4-8e9e-9e07400a5989
+creator_id        : test_ai
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.40888888888888886
+text_preview      : Artificial intelligence represents a transformative paradigm...
+timestamp         : 2026-06-24T18:58:59.704630Z
+
+assigned_label    : Verified Authentic: This content matches patterns consistent with original human composition and diverse linguistic 
+                    structure.
+combined_score    : 0.1701
+content_id        : 0427b510-d910-4db9-bac0-c1a46be2b652
+creator_id        : user_45
+creator_reasoning : This is my personal original creative food blog description written completely from memory.
+groq_score        : 0.21
+lifecycle_status  : under review
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:53:33.598806Z
+
+assigned_label    : Calibrating (Milestone 4 Integrated)
+combined_score    : 0.1701
+content_id        : 1bb30326-9cbf-43de-bc72-21699fb23dcf
+creator_id        : user_45
+creator_reasoning : 
+groq_score        : 0.21
+lifecycle_status  : classified
+stylometric_score : 0.09599999999999997
+text_preview      : ok so i finally tried that new ramen place downtown and hone...
+timestamp         : 2026-06-24T18:51:53.884526Z
+
+assigned_label    : Processing (Milestone 3 Skeleton)
+combined_score    : 0.87
+content_id        : 8807962d-4cde-4386-a8f6-c62ed93bfc27
+creator_id        : user_45
+creator_reasoning : 
+groq_score        : 0.87
+lifecycle_status  : classified
+stylometric_score : 0.0
+text_preview      : Furthermore, it is critical to maximize leverage across cros...
+timestamp         : 2026-06-24T18:48:22.565714Z
+
+
+
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $rateBody = @{
+>>     text = "This is a test submission for rate limit testing purposes only."
+>>     creator_id = "ratelimit-test"
+>> } | ConvertTo-Json
+>> 
+>> 1..12 | ForEach-Object {
+>>     try {
+>>         $resp = Invoke-WebRequest -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $rateBody -ContentType "application/json" -UseBasicParsing                                                                                                                                        
+>>         Write-Host "Request $_ : $($resp.StatusCode)"                                                                                       
+>>     } catch {                                                                                                                               
+>>         Write-Host "Request $_ : $($_.Exception.Response.StatusCode.Value__)"                                                               
+>>     }                                                                                                                                       
+>> }                                                                                                                                           
+Request 1 : 201                                                                                                                                
+Request 2 : 201                                                                                                                                
+Request 3 : 201                                                                                                                                
+Request 4 : 201                                                                                                                                
+Request 5 : 201                                                                                                                                
+Request 6 : 201                                                                                                                                
+Request 7 : 201                                                                                                                                
+Request 8 : 201
+Request 9 : 201
+Request 10 : 201
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+(.venv) PS C:\Users\s-bas\Codepath AI201\ai201-project4-provenance-guard> $rateBody = @{
+>>     text = "This is a test submission for rate limit testing purposes only."
+>>     creator_id = "ratelimit-test"
+>> } | ConvertTo-Json
+>> 
+>> 1..12 | ForEach-Object {
+>>     try {
+>>         $resp = Invoke-WebRequest -Uri "http://127.0.0.1:5000/submit" -Method Post -Body $rateBody -ContentType "application/json" -UseBasicParsing
+>>         Write-Host "Request $_ : $($resp.StatusCode)"
+>>     } catch {
+>>         Write-Host "Request $_ : $($_.Exception.Response.StatusCode.Value__)"
+>>     }
+>> }
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429
+Request 
+
+429 Too Many Requests
+Too Many Requests
+10 per 1 minute
+ : 429

@@ -169,4 +169,3 @@ When an appeal is validated, the database row matching the target `content_id` i
 * **Generation Targets:** Conditional mapping structures outputs to string labels, the standalone `POST /appeal` routing structure, and the integration of `Flask-Limiter`.
 * **Verification Approach:** Simulating rapid-fire requests via shell tracking loops to force `429` error states, validating changing labels across score ranges, and auditing the updated log tables.
 
-### MILESTONE 3 ###
