@@ -7,7 +7,7 @@
 ---
 
 ## 📺 Walkthrough Video
-[👉 Click here to watch my 2-minute project walkthrough video!](YOUR_LOOM_OR_YOUTUBE_LINK_HERE)
+[👉 Click here to watch my 2-minute project walkthrough video!](https://youtu.be/3DqiKy8pHkQ)
 
 ---
 
